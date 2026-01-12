@@ -1,10 +1,24 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import Post from '.';
-import PostComment from '.';
+import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import PostComments from './index';
 
-describe('Teste para o componente PostComment', () => {
-    it('Deve renderizar o componente corretamente', () => {
-        render(<PostComment/>);
-        expect(screen.getByText('Comentar')).toBeInTheDocument();
+describe('Teste para o componente PostComments', () => {
+    it('Deve permitir inserir dois comentários', () => {
+        render(<PostComments />);
+
+        const input = screen.getByTestId('input-comentario');
+        const botao = screen.getByTestId('btn-enviar');
+
+        // Primeiro comentário
+        fireEvent.change(input, { target: { value: 'Primeiro comentário' } });
+        fireEvent.click(botao);
+
+        // Segundo comentário
+        fireEvent.change(input, { target: { value: 'Segundo comentário' } });
+        fireEvent.click(botao);
+
+        // Verificações
+        expect(screen.getByText('Primeiro comentário')).toBeInTheDocument();
+        expect(screen.getByText('Segundo comentário')).toBeInTheDocument();
     });
 });
